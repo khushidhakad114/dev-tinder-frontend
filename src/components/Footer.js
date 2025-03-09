@@ -1,15 +1,23 @@
 import React from "react";
+import { motion } from "framer-motion";
+
+const fadeIn = {
+  hidden: { opacity: 0, y: -10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
 
 const Footer = () => {
   return (
-    <footer className="footer footer-center bg-base-300 text-base-content p-4">
-      <aside>
-        <p>
-          Copyright © {new Date().getFullYear()} - All right reserved by ACME
-          Industries Ltd
-        </p>
-      </aside>
-    </footer>
+    <motion.footer
+      className="footer footer-center bg-highlight text-base-content p-4"
+      initial="hidden"
+      animate="visible"
+      variants={fadeIn}
+    >
+      <p className="text-gray-900">
+        Copyright © {new Date().getFullYear()} - All rights reserved.
+      </p>
+    </motion.footer>
   );
 };
 

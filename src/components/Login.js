@@ -2,11 +2,19 @@ import React, { useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+
+const fadeIn = {
+  hidden: { opacity: 0, y: -10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
@@ -56,6 +64,7 @@ const Login = () => {
       );
       console.log("Login Response:", response.data);
       alert("Login successful");
+      navigate("/myprofile");
     } catch (err) {
       setErrorMessage(err.response?.data?.error || "Login failed");
     }
@@ -66,39 +75,53 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center p-7">
-      <div className="card bg-base-100 w-96 shadow-2xl p-6">
-        <h2 className="text-xl font-semibold text-center mb-4">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      className="flex justify-center items-center p-7"
+    >
+      <motion.div
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="card bg-secondary w-96 shadow-2xl p-6"
+      >
+        <h2 className="text-xl text-white font-semibold text-center mb-4">
           {isSignup ? "Sign Up" : "Login"}
         </h2>
         {isSignup && (
           <>
-            <input
+            <motion.input
               type="text"
               placeholder="First Name"
               ref={firstNameRef}
-              className="input input-bordered w-full mb-3"
+              className="input input-bordered bg-white text-black w-full mb-3"
+              whileFocus={{ scale: 1.05 }}
             />
-            <input
+            <motion.input
               type="text"
               placeholder="Last Name"
               ref={lastNameRef}
-              className="input input-bordered w-full mb-3"
+              className="input input-bordered bg-white text-black w-full mb-3"
+              whileFocus={{ scale: 1.05 }}
             />
           </>
         )}
-        <input
+        <motion.input
           type="email"
           placeholder="Email"
           ref={emailRef}
-          className="input input-bordered w-full mb-3"
+          className="input input-bordered bg-white text-black w-full mb-3"
+          whileFocus={{ scale: 1.05 }}
         />
         <div className="relative w-full mb-3">
-          <input
+          <motion.input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             ref={passwordRef}
-            className="input input-bordered w-full"
+            className="input input-bordered bg-white text-black w-full"
+            whileFocus={{ scale: 1.05 }}
           />
           <button
             type="button"
@@ -109,20 +132,32 @@ const Login = () => {
           </button>
         </div>
         {errorMessage && (
-          <p className="text-red-500 text-sm text-center mb-3">
+          <motion.p
+            className="text-highlight text-sm text-center mb-3"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             {errorMessage}
-          </p>
+          </motion.p>
         )}
-        <button className="btn btn-primary w-full" onClick={handleSubmit}>
+        <motion.button
+          className="btn btn-primary bg-primary text-white w-full"
+          onClick={handleSubmit}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           {isSignup ? "Sign Up" : "Login"}
-        </button>
-        <p className="text-center mt-3 cursor-pointer" onClick={toggleSignup}>
+        </motion.button>
+        <p
+          className="text-center text-white mt-3 cursor-pointer"
+          onClick={toggleSignup}
+        >
           {isSignup
             ? "Already have an account? Login"
             : "Don't have an account? Sign Up"}
         </p>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
