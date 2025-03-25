@@ -8,6 +8,10 @@ import UpdateProfile from "./components/UpdateProfile";
 import MyProfile from "./components/MyProfile";
 import Login from "./components/Login";
 import Connections from "./components/Connections";
+import { Provider } from "react-redux";
+import store from "./store";
+import ReceiveRequests from "./components/ReceiveRequests";
+import Friends from "./components/Friends";
 
 function AppLayout() {
   return (
@@ -30,8 +34,8 @@ const Router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: "/home",
-        element: <Login />,
+        path: "/",
+        element: <Connections />,
       },
       {
         path: "/myprofile",
@@ -49,12 +53,24 @@ const Router = createBrowserRouter([
         path: "/connections",
         element: <Connections />,
       },
+      {
+        path: "/receive-requests",
+        element: <ReceiveRequests />,
+      },
+      {
+        path: "/friends",
+        element: <Friends />,
+      },
     ],
   },
 ]);
 
 function App() {
-  return <RouterProvider router={Router}></RouterProvider>;
+  return (
+    <Provider store={store}>
+      <RouterProvider router={Router}></RouterProvider>
+    </Provider>
+  );
 }
 
 export default App;

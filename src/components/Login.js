@@ -4,6 +4,8 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { setUsers } from "../slices/userSlice";
+import { useDispatch } from "react-redux";
 
 const fadeIn = {
   hidden: { opacity: 0, y: -10 },
@@ -15,6 +17,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
@@ -63,8 +66,9 @@ const Login = () => {
         }
       );
       console.log("Login Response:", response.data);
+      dispatch(setUsers([response.data.user]));
       alert("Login successful");
-      navigate("/myprofile");
+      navigate("/connections");
     } catch (err) {
       setErrorMessage(err.response?.data?.error || "Login failed");
     }
@@ -76,6 +80,7 @@ const Login = () => {
 
   return (
     <motion.div
+      variants={fadeIn}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
