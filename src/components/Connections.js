@@ -57,7 +57,7 @@ const Connections = () => {
       variants={fadeIn}
     >
       <div className="card bg-secondary shadow-xl p-6 w-96 text-white text-center">
-        <h2 className="text-xl font-semibold mb-4">Connections</h2>
+        <h2 className="text-3xl font-semibold mb-4">Feed</h2>
         {currentUser ? (
           <>
             <div className="mb-3 text-lg font-bold">
@@ -80,7 +80,7 @@ const Connections = () => {
             </div>
           </>
         ) : (
-          <p className="text-gray-300">No users left to show.</p>
+          <p className="text-white">No users left to show.</p>
         )}
       </div>
     </motion.div>

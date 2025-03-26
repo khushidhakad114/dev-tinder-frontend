@@ -4,7 +4,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { setUsers } from "../slices/userSlice";
+import { loginSuccess, setUsers } from "../slices/userSlice";
 import { useDispatch } from "react-redux";
 
 const fadeIn = {
@@ -66,9 +66,13 @@ const Login = () => {
         }
       );
       console.log("Login Response:", response.data);
+      localStorage.setItem("token", response.data.token);
+      dispatch(
+        loginSuccess({ token: response.data.token, user: response.data.user })
+      );
       dispatch(setUsers([response.data.user]));
       alert("Login successful");
-      navigate("/connections");
+      navigate("/feed");
     } catch (err) {
       setErrorMessage(err.response?.data?.error || "Login failed");
     }

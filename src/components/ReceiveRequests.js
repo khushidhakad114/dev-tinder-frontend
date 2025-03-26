@@ -45,7 +45,6 @@ const ReceiveRequests = ({ setRequestCount }) => {
 
   return (
     <div className="flex flex-col items-center justify-center mt-10">
-      <h1 className="text-3xl font-bold text-white mb-4">Received Requests</h1>
       {requests.length > 0 ? (
         requests.map((request) => (
           <div
@@ -73,7 +72,9 @@ const ReceiveRequests = ({ setRequestCount }) => {
           </div>
         ))
       ) : (
-        <p className="text-lg text-gray-400">No received requests yet.</p>
+        <p className="text-3xl font-bold text-white mb-4">
+          No received requests yet.
+        </p>
       )}
     </div>
   );

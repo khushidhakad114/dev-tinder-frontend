@@ -9,6 +9,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { logoutUser } from "../slices/userSlice";
+import { useDispatch } from "react-redux";
 
 const fadeIn = {
   hidden: { opacity: 0, y: -10 },
@@ -18,6 +20,7 @@ const fadeIn = {
 const Navbar = () => {
   const navigate = useNavigate();
   const [requestCount, setRequestCount] = useState(0);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -51,6 +54,8 @@ const Navbar = () => {
         {},
         { withCredentials: true }
       );
+      dispatch(logoutUser());
+      alert("Logout Successful");
       navigate("/login");
     } catch (err) {
       console.error("Logout failed:", err);
@@ -124,7 +129,7 @@ const Navbar = () => {
           className="btn btn-outline text-lg font-semibold border-gray-900 text-gray-900 px-4 py-2"
           onClick={() => navigate("/connections")}
         >
-          Connections
+          Feed
         </button>
       </div>
     </motion.div>

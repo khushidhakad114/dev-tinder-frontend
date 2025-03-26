@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 import ReceiveRequests from "./components/ReceiveRequests";
 import Friends from "./components/Friends";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function AppLayout() {
   return (
@@ -35,32 +36,16 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Connections />,
+        element: <ProtectedRoute />,
+        children: [
+          { path: "/feed", element: <Connections /> },
+          { path: "/myprofile", element: <MyProfile /> },
+          { path: "/updateprofile", element: <UpdateProfile /> },
+          { path: "/receive-requests", element: <ReceiveRequests /> },
+          { path: "/friends", element: <Friends /> },
+        ],
       },
-      {
-        path: "/myprofile",
-        element: <MyProfile />,
-      },
-      {
-        path: "/updateprofile",
-        element: <UpdateProfile />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/connections",
-        element: <Connections />,
-      },
-      {
-        path: "/receive-requests",
-        element: <ReceiveRequests />,
-      },
-      {
-        path: "/friends",
-        element: <Friends />,
-      },
+      { path: "/login", element: <Login /> },
     ],
   },
 ]);
