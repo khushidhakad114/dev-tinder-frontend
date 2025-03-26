@@ -24,7 +24,11 @@ const UpdateProfile = () => {
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/myProfile", { withCredentials: true })
-      .then((res) => setFormData(res.data))
+      .then((res) => {
+        if (res.data.user) {
+          setFormData((prev) => ({ ...prev, ...res.data.user }));
+        }
+      })
       .catch((err) => console.error("Error fetching profile:", err));
   }, []);
 
@@ -39,6 +43,7 @@ const UpdateProfile = () => {
         formData,
         { withCredentials: true }
       );
+      alert("Profile Updated");
       console.log("Profile Updated:", res.data);
       navigate("/myprofile");
     } catch (err) {

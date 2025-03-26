@@ -127,7 +127,7 @@ const Navbar = () => {
 
         <button
           className="btn btn-outline text-lg font-semibold border-gray-900 text-gray-900 px-4 py-2"
-          onClick={() => navigate("/connections")}
+          onClick={() => navigate("feed")}
         >
           Feed
         </button>
