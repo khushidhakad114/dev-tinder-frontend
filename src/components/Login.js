@@ -32,10 +32,10 @@ const Login = () => {
   const signupUser = async () => {
     setErrorMessage("");
     const userData = {
-      firstName: firstNameRef.current?.value,
-      lastName: lastNameRef.current?.value,
-      email: emailRef.current?.value,
-      password: passwordRef.current?.value,
+      firstName: firstNameRef.current?.value.trim(),
+      lastName: lastNameRef.current?.value.trim(),
+      email: emailRef.current?.value.trim(),
+      password: passwordRef.current?.value.trim(),
     };
 
     try {

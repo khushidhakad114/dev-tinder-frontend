@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import { setRequests, removeRequest } from "../slices/requestSlice";
 
-const ReceiveRequests = ({ setRequestCount }) => {
-  const [requests, setRequests] = useState([]);
+const ReceiveRequests = () => {
+  const dispatch = useDispatch();
+  const requests = useSelector((state) => state.requests.receiveRequests);
 
   useEffect(() => {
     fetchRequests();
@@ -14,8 +17,7 @@ const ReceiveRequests = ({ setRequestCount }) => {
         "http://localhost:8000/api/receive-requests",
         { withCredentials: true }
       );
-      setRequests(res.data.receiveRequests || []);
-      setRequestCount(res.data.receiveRequests.length || 0);
+      dispatch(setRequests(res.data.receiveRequests || []));
     } catch (error) {
       console.error("Error fetching requests:", error);
     }
@@ -29,15 +31,7 @@ const ReceiveRequests = ({ setRequestCount }) => {
         { withCredentials: true }
       );
 
-      setRequests((prevRequests) => {
-        const updatedRequests = prevRequests.filter(
-          (req) => req._id !== requestId
-        );
-
-        setRequestCount(updatedRequests.length);
-
-        return updatedRequests;
-      });
+      dispatch(removeRequest(requestId));
     } catch (error) {
       console.error(`Error updating request (${status}):`, error);
     }

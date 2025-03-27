@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import {
@@ -10,7 +10,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { logoutUser } from "../slices/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setRequests } from "../slices/requestSlice";
 
 const fadeIn = {
   hidden: { opacity: 0, y: -10 },
@@ -19,33 +20,34 @@ const fadeIn = {
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [requestCount, setRequestCount] = useState(0);
   const dispatch = useDispatch();
+
+  const requestCount = useSelector(
+    (state) => state.requests.receiveRequests.length
+  );
 
   useEffect(() => {
     const fetchRequests = async () => {
       try {
         const response = await axios.get(
           "http://localhost:8000/api/receive-requests",
-          { withCredentials: true }
+          {
+            withCredentials: true,
+          }
         );
 
-        console.log("API Response:", response.data);
-
         if (response.data && Array.isArray(response.data.receiveRequests)) {
-          setRequestCount(response.data.receiveRequests.length);
+          dispatch(setRequests(response.data.receiveRequests));
         } else {
           console.error("Invalid API response structure:", response.data);
-          setRequestCount(0);
         }
       } catch (error) {
         console.error("Error fetching requests:", error);
-        setRequestCount(0);
       }
     };
 
     fetchRequests();
-  }, []);
+  }, [dispatch]);
 
   const handleLogout = async () => {
     try {
@@ -55,6 +57,7 @@ const Navbar = () => {
         { withCredentials: true }
       );
       dispatch(logoutUser());
+      dispatch(setRequests([]));
       alert("Logout Successful");
       navigate("/login");
     } catch (err) {
@@ -116,18 +119,16 @@ const Navbar = () => {
         </button>
 
         <button className="btn btn-ghost btn-circle">
-          <div className="indicator">
-            <FontAwesomeIcon
-              icon={faUser}
-              onClick={() => navigate("/myprofile")}
-              className="h-5 w-5 text-gray-900"
-            />
-          </div>
+          <FontAwesomeIcon
+            icon={faUser}
+            onClick={() => navigate("/myprofile")}
+            className="h-5 w-5 text-gray-900"
+          />
         </button>
 
         <button
           className="btn btn-outline text-lg font-semibold border-gray-900 text-gray-900 px-4 py-2"
-          onClick={() => navigate("feed")}
+          onClick={() => navigate("/feed")}
         >
           Feed
         </button>
