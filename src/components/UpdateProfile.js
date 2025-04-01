@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import React, { useState, useRef, useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const fadeIn = {
   hidden: { opacity: 0, y: -10 },
@@ -10,113 +12,106 @@ const fadeIn = {
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    age: "",
-    gender: "",
-    password: "",
-    skills: "",
-  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
+  const phoneRef = useRef(null);
+  const ageRef = useRef(null);
+  const genderRef = useRef(null);
+  const skillsRef = useRef(null);
 
   useEffect(() => {
     axios
       .get("http://localhost:8000/api/myProfile", { withCredentials: true })
       .then((res) => {
         if (res.data.user) {
-          setFormData((prev) => ({ ...prev, ...res.data.user }));
+          firstNameRef.current.value = res.data.user.firstName || "";
+          lastNameRef.current.value = res.data.user.lastName || "";
+          emailRef.current.value = res.data.user.email || "";
+          phoneRef.current.value = res.data.user.phone || "";
+          ageRef.current.value = res.data.user.age || "";
+          genderRef.current.value = res.data.user.gender || "";
+          skillsRef.current.value = res.data.user.skills || "";
         }
       })
       .catch((err) => console.error("Error fetching profile:", err));
   }, []);
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
+    const updatedData = {
+      firstName: firstNameRef.current?.value.trim(),
+      lastName: lastNameRef.current?.value.trim(),
+      email: emailRef.current?.value.trim(),
+      password: passwordRef.current?.value.trim(),
+      phone: phoneRef.current?.value.trim(),
+      age: ageRef.current?.value.trim(),
+      gender: genderRef.current?.value.trim(),
+      skills: skillsRef.current?.value.trim(),
+    };
+
     try {
-      const res = await axios.put(
-        "http://localhost:8000/api/updateProfile",
-        formData,
-        { withCredentials: true }
-      );
-      alert("Profile Updated");
-      console.log("Profile Updated:", res.data);
+      await axios.put("http://localhost:8000/api/updateProfile", updatedData, {
+        withCredentials: true,
+      });
+      alert("Profile Updated Successfully");
       navigate("/myprofile");
     } catch (err) {
-      console.error("Error updating profile:", err);
+      setErrorMessage(err.response?.data?.error || "Profile update failed");
     }
   };
 
   return (
     <motion.div
-      className="flex justify-center items-center mt-20"
+      variants={fadeIn}
       initial="hidden"
       animate="visible"
-      variants={fadeIn}
+      className="flex justify-center items-center p-7 mt-20"
     >
-      <div className="card bg-secondary shadow-xl p-6 w-96 text-white">
-        <h2 className="text-xl font-semibold text-center mb-4">
+      <motion.div className="relative card w-full max-w-3xl shadow-2xl p-6 bg-transparent text-gray-200 backdrop-blur-md border border-navbar-border rounded-xl hover:shadow-xl hover:border-white">
+        <h2 className="text-xl text-white font-semibold text-center mb-4">
           Update Profile
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            className="input input-bordered bg-white text-black w-full"
-            onChange={handleChange}
-            value={formData.firstName}
-          />
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            className="input input-bordered bg-white text-black w-full"
-            onChange={handleChange}
-            value={formData.lastName}
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className="input input-bordered bg-white text-black w-full"
-            onChange={handleChange}
-            value={formData.email}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="input input-bordered bg-white text-black w-full"
-            onChange={handleChange}
-            value={formData.password}
-          />
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone"
-            className="input input-bordered bg-white text-black w-full"
-            onChange={handleChange}
-            value={formData.phone}
-          />
-          <input
-            type="text"
-            name="age"
-            placeholder="Age"
-            className="input input-bordered bg-white text-black w-full"
-            onChange={handleChange}
-            value={formData.age}
-          />
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
+          {[
+            { ref: firstNameRef, placeholder: "First Name" },
+            { ref: lastNameRef, placeholder: "Last Name" },
+            { ref: emailRef, placeholder: "Email" },
+            { ref: phoneRef, placeholder: "Phone" },
+            { ref: ageRef, placeholder: "Age" },
+            { ref: skillsRef, placeholder: "Skills" },
+          ].map((field, index) => (
+            <motion.input
+              key={index}
+              type="text"
+              placeholder={field.placeholder}
+              ref={field.ref}
+              className="bg-transparent text-gray-200 w-full border-b border-gray-500 focus:outline-none border-b-2 border-glow"
+            />
+          ))}
+          <div className="relative w-full">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="New Password"
+              ref={passwordRef}
+              className="bg-transparent text-gray-200 w-full border-b border-gray-500 focus:outline-none border-b-2 border-glow"
+            />
+            <button
+              type="button"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </button>
+          </div>
           <select
-            name="gender"
-            placeholder="Gender"
-            className="select select-bordered bg-white text-black w-full"
-            onChange={handleChange}
-            value={formData.gender}
+            ref={genderRef}
+            className="bg-transparent text-gray-200 w-full border-b border-gray-500 focus:outline-none border-b-2 border-glow"
           >
             <option value="" disabled>
               Select Gender
@@ -125,22 +120,19 @@ const UpdateProfile = () => {
             <option value="female">Female</option>
             <option value="other">Other</option>
           </select>
-          <input
-            type="text"
-            name="skills"
-            placeholder="Skills"
-            className="input input-bordered bg-white text-black w-full"
-            onChange={handleChange}
-            value={formData.skills}
-          />
+          {errorMessage && (
+            <p className="text-red-400 text-sm text-center col-span-2">
+              {errorMessage}
+            </p>
+          )}
           <button
             type="submit"
-            className="btn btn-primary bg-primary text-white w-full"
+            className="btn btn-primary bg-primary text-white col-span-2 hover:bg-blue-700 transition duration-200 ease-in-out"
           >
             Save Changes
           </button>
         </form>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };

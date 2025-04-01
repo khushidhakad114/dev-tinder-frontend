@@ -1,7 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setRequests, removeRequest } from "../slices/requestSlice";
+import { motion } from "framer-motion";
+
+const fadeIn = {
+  hidden: { opacity: 0, y: -10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
 
 const ReceiveRequests = () => {
   const dispatch = useDispatch();
@@ -38,39 +44,50 @@ const ReceiveRequests = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mt-10">
+    <motion.div
+      className="flex flex-col items-center justify-center mt-16"
+      initial="hidden"
+      animate="visible"
+      variants={fadeIn}
+    >
+      <h2 className="text-3xl font-bold text-white mb-6">Received Requests</h2>
       {requests.length > 0 ? (
         requests.map((request) => (
-          <div
+          <motion.div
             key={request._id}
-            className="bg-gray-900 p-6 rounded-lg shadow-md w-96 text-white flex justify-between items-center mb-4 border border-gray-700"
+            className="relative card w-full max-w-lg shadow-xl p-6 bg-transparent text-gray-200 backdrop-blur-md border border-gray-600 rounded-lg hover:shadow-2xl transition-all mb-5"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
           >
-            <span className="font-semibold">
-              {request.sender?.firstName ?? "Unknown"}{" "}
-              {request.sender?.lastName ?? ""}
-            </span>
-            <div className="flex gap-3">
-              <button
-                onClick={() => handleRequestUpdate(request._id, "accepted")}
-                className="bg-green-500 px-4 py-2 rounded-md text-white font-semibold"
-              >
-                Accept
-              </button>
-              <button
-                onClick={() => handleRequestUpdate(request._id, "rejected")}
-                className="bg-red-500 px-4 py-2 rounded-md text-white font-semibold"
-              >
-                Reject
-              </button>
+            <div className="flex justify-between items-center">
+              <span className="font-semibold text-lg">
+                {request.sender?.firstName ?? "Unknown"}{" "}
+                {request.sender?.lastName ?? ""}
+              </span>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleRequestUpdate(request._id, "accepted")}
+                  className="btn bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => handleRequestUpdate(request._id, "rejected")}
+                  className="btn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
+                >
+                  Reject
+                </button>
+              </div>
             </div>
-          </div>
+          </motion.div>
         ))
       ) : (
-        <p className="text-3xl font-bold text-white mb-4">
+        <p className="text-xl font-semibold text-white">
           No received requests yet.
         </p>
       )}
-    </div>
+    </motion.div>
   );
 };
 

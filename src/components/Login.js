@@ -88,13 +88,13 @@ const Login = () => {
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex justify-center items-center p-7"
+      className="flex justify-center items-center p-7 mt-20"
     >
       <motion.div
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="card bg-secondary w-96 shadow-2xl p-6"
+        className="relative card w-96 shadow-2xl p-6 bg-transparent text-gray-300 backdrop-blur-md bg-navbar border border-navbar-border hover:shadow-xl hover:border-white"
       >
         <h2 className="text-xl text-white font-semibold text-center mb-4">
           {isSignup ? "Sign Up" : "Login"}
@@ -105,15 +105,13 @@ const Login = () => {
               type="text"
               placeholder="First Name"
               ref={firstNameRef}
-              className="input input-bordered bg-white text-black w-full mb-3"
-              whileFocus={{ scale: 1.05 }}
+              className="input input-bordered bg-white text-black w-full mb-3 hover:bg-gray-700 hover:text-white transition duration-200 ease-in-out"
             />
             <motion.input
               type="text"
               placeholder="Last Name"
               ref={lastNameRef}
-              className="input input-bordered bg-white text-black w-full mb-3"
-              whileFocus={{ scale: 1.05 }}
+              className="input input-bordered bg-white text-black w-full mb-3 hover:bg-gray-700 hover:text-white transition duration-200 ease-in-out"
             />
           </>
         )}
@@ -121,16 +119,14 @@ const Login = () => {
           type="email"
           placeholder="Email"
           ref={emailRef}
-          className="input input-bordered bg-white text-black w-full mb-3"
-          whileFocus={{ scale: 1.05 }}
+          className="input input-bordered bg-white text-black w-full mb-3 hover:bg-gray-700 hover:text-white transition duration-200 ease-in-out"
         />
         <div className="relative w-full mb-3">
           <motion.input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             ref={passwordRef}
-            className="input input-bordered bg-white text-black w-full"
-            whileFocus={{ scale: 1.05 }}
+            className="input input-bordered bg-white text-black w-full hover:bg-gray-700 hover:text-white transition duration-200 ease-in-out"
           />
           <button
             type="button"
@@ -150,7 +146,7 @@ const Login = () => {
           </motion.p>
         )}
         <motion.button
-          className="btn btn-primary bg-primary text-white w-full"
+          className="btn btn-primary bg-primary text-white w-full hover:bg-gray-700 hover:text-white transition duration-200 ease-in-out"
           onClick={handleSubmit}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -158,7 +154,7 @@ const Login = () => {
           {isSignup ? "Sign Up" : "Login"}
         </motion.button>
         <p
-          className="text-center text-white mt-3 cursor-pointer"
+          className="text-center text-white mt-3 cursor-pointer hover:underline"
           onClick={toggleSignup}
         >
           {isSignup
