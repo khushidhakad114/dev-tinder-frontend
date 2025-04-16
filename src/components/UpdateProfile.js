@@ -1,6 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -12,13 +10,11 @@ const fadeIn = {
 
 const UpdateProfile = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const emailRef = useRef(null);
-  const passwordRef = useRef(null);
   const phoneRef = useRef(null);
   const ageRef = useRef(null);
   const genderRef = useRef(null);
@@ -48,7 +44,6 @@ const UpdateProfile = () => {
       firstName: firstNameRef.current?.value.trim(),
       lastName: lastNameRef.current?.value.trim(),
       email: emailRef.current?.value.trim(),
-      password: passwordRef.current?.value.trim(),
       phone: phoneRef.current?.value.trim(),
       age: ageRef.current?.value.trim(),
       gender: genderRef.current?.value.trim(),
@@ -94,28 +89,11 @@ const UpdateProfile = () => {
               className="bg-transparent text-gray-200 w-full border-b border-gray-500 focus:outline-none border-b-2 border-glow"
             />
           ))}
-          <div className="relative w-full">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="New Password"
-              ref={passwordRef}
-              className="bg-transparent text-gray-200 w-full border-b border-gray-500 focus:outline-none border-b-2 border-glow"
-            />
-            <button
-              type="button"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-            </button>
-          </div>
           <select
             ref={genderRef}
-            className="bg-transparent text-gray-200 w-full border-b border-gray-500 focus:outline-none border-b-2 border-glow"
+            className="bg-gray-800 text-gray-200 w-full border-b border-gray-500 focus:outline-none border-b-2 border-glow"
           >
-            <option value="" disabled>
-              Select Gender
-            </option>
+            <option value="">Select Gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
             <option value="other">Other</option>

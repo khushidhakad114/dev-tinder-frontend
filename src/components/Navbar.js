@@ -26,27 +26,6 @@ const Navbar = () => {
     (state) => state.requests.receiveRequests.length
   );
 
-  useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8000/api/receive-requests",
-          { withCredentials: true }
-        );
-
-        if (response.data && Array.isArray(response.data.receiveRequests)) {
-          dispatch(setRequests(response.data.receiveRequests));
-        } else {
-          console.error("Invalid API response structure:", response.data);
-        }
-      } catch (error) {
-        console.error("Error fetching requests:", error);
-      }
-    };
-
-    fetchRequests();
-  }, [dispatch]);
-
   const handleLogout = async () => {
     try {
       await axios.post(

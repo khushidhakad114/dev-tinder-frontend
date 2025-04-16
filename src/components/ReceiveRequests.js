@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
 import { setRequests, removeRequest } from "../slices/requestSlice";
+import axios from "axios";
 import { motion } from "framer-motion";
 
 const fadeIn = {
@@ -36,7 +36,6 @@ const ReceiveRequests = () => {
         {},
         { withCredentials: true }
       );
-
       dispatch(removeRequest(requestId));
     } catch (error) {
       console.error(`Error updating request (${status}):`, error);
@@ -45,47 +44,75 @@ const ReceiveRequests = () => {
 
   return (
     <motion.div
-      className="flex flex-col items-center justify-center mt-16"
+      className="flex flex-col items-center justify-center mt-0 p-8"
       initial="hidden"
       animate="visible"
       variants={fadeIn}
     >
-      <h2 className="text-3xl font-bold text-white mb-6">Received Requests</h2>
-      {requests.length > 0 ? (
-        requests.map((request) => (
-          <motion.div
-            key={request._id}
-            className="relative card w-full max-w-lg shadow-xl p-6 bg-transparent text-gray-200 backdrop-blur-md border border-gray-600 rounded-lg hover:shadow-2xl transition-all mb-5"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="flex justify-between items-center">
-              <span className="font-semibold text-lg">
-                {request.sender?.firstName ?? "Unknown"}{" "}
-                {request.sender?.lastName ?? ""}
-              </span>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => handleRequestUpdate(request._id, "accepted")}
-                  className="btn bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
-                >
-                  Accept
-                </button>
-                <button
-                  onClick={() => handleRequestUpdate(request._id, "rejected")}
-                  className="btn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
-                >
-                  Reject
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        ))
-      ) : (
+      {requests.length === 0 ? (
         <p className="text-xl font-semibold text-white">
           No received requests yet.
         </p>
+      ) : (
+        <>
+          <h2 className="text-xl font-bold text-white mb-6">
+            Received Requests
+          </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-16 w-full max-w-full">
+            {requests.map((request) => (
+              <motion.div
+                key={request._id}
+                className="card w-full shadow-2xl p-6 bg-transparent text-gray-300 backdrop-blur-md border border-gray-600 rounded-lg"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <figure>
+                  <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSI_efoBNhpgj44SFexzeYTfsDINdwvsx761A&s"
+                    alt="User"
+                    className="rounded-t-xl w-full h-48 object-cover"
+                  />
+                </figure>
+                <div className="card-body p-4">
+                  <h2 className="card-title">
+                    {request.sender?.firstName ?? "Unknown"}{" "}
+                    {request.sender?.lastName ?? ""}
+                  </h2>
+                  <p>
+                    <strong>Email:</strong> {request.sender?.email || "N/A"}
+                  </p>
+                  <div>
+                    <strong>Skills:</strong>{" "}
+                    {request.sender?.skills && request.sender.skills.length > 0
+                      ? request.sender.skills.join(", ")
+                      : "No skills added"}
+                  </div>
+
+                  <div className="card-actions justify-between mt-4">
+                    <button
+                      onClick={() =>
+                        handleRequestUpdate(request._id, "accepted")
+                      }
+                      className="btn bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-200"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleRequestUpdate(request._id, "rejected")
+                      }
+                      className="btn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-200"
+                    >
+                      Reject
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </>
       )}
     </motion.div>
   );

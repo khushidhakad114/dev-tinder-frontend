@@ -1,5 +1,10 @@
 import "./App.css";
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Outlet,
+  RouterProvider,
+  useLocation,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 
@@ -16,6 +21,10 @@ import ThreeJSBackground from "./components/ThreeJSBackground";
 import FriendProfile from "./components/FriendProfile";
 
 function AppLayout() {
+  const location = useLocation();
+  const showThreeJS =
+    location.pathname === "/" || location.pathname === "/login";
+
   return (
     <div
       className="App"
@@ -26,8 +35,7 @@ function AppLayout() {
         position: "relative",
       }}
     >
-      <ThreeJSBackground />
-      <Navbar />
+      {showThreeJS && <ThreeJSBackground />} <Navbar />
       <div className="flex-1 overflow-y-auto">
         <Outlet />
       </div>
