@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 import {
@@ -47,19 +47,26 @@ const Navbar = () => {
       initial="hidden"
       animate="visible"
       variants={fadeIn}
-      className="relative flex justify-between items-center bg-transparent text-gray-300 backdrop-blur-md h-20"
+      className="relative flex justify-between items-center bg-transparent text-gray-300 backdrop-blur-md h-20 shadow-none border-none outline-none"
+      style={{
+        border: "none",
+        boxShadow: "none",
+        outline: "none",
+      }}
     >
-      <div className="absolute top-0 left-0 w-full h-[2px] animate-border-sparkle"></div>
-      <div className="absolute bottom-0 left-0 w-full h-[2px] animate-border-sparkle"></div>
-
+      {/* Left - Dropdown */}
       <div className="navbar-start">
         <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle shadow-none border-none outline-none focus:outline-none"
+          >
             <FontAwesomeIcon icon={faBars} className="h-6 w-6 text-white" />
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content bg-white/10 backdrop-blur-xl text-white z-50 mt-3 w-52 p-1 shadow border border-white/20"
+            className="menu menu-sm dropdown-content bg-white/10 backdrop-blur-xl text-white z-50 mt-3 w-52 p-1 shadow-none border-none outline-none focus:outline-none"
           >
             <li className="hover-effect mb-1">
               <a onClick={() => navigate("/login")}>Login</a>
@@ -77,19 +84,21 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Center - Title */}
       <div className="navbar-center">
         <h1 className="text-xl font-bold text-white drop-shadow-lg">
-          Dev-Tinder
+          Dev Tinder
         </h1>
       </div>
 
+      {/* Right - Icons + Feed */}
       <div className="navbar-end flex items-center gap-5">
-        <button className="btn btn-ghost btn-circle">
+        <button className="btn btn-ghost btn-circle shadow-none border-none outline-none focus:outline-none">
           <FontAwesomeIcon icon={faSearch} className="h-6 w-6 text-white" />
         </button>
 
         <button
-          className="btn btn-ghost btn-circle relative"
+          className="btn btn-ghost btn-circle relative shadow-none border-none outline-none focus:outline-none"
           onClick={() => navigate("/receive-requests")}
         >
           <FontAwesomeIcon icon={faBell} className="h-6 w-6 text-white" />
@@ -100,7 +109,7 @@ const Navbar = () => {
           )}
         </button>
 
-        <button className="btn btn-ghost btn-circle">
+        <button className="btn btn-ghost btn-circle shadow-none border-none outline-none focus:outline-none">
           <FontAwesomeIcon
             icon={faUser}
             onClick={() => navigate("/myprofile")}
@@ -108,6 +117,7 @@ const Navbar = () => {
           />
         </button>
 
+        {/* Only Feed button keeps its border */}
         <button
           className="btn text-sm font-semibold border border-white text-white px-4 py-2 transition-all 
           hover:bg-white hover:text-black"
@@ -117,38 +127,12 @@ const Navbar = () => {
         </button>
       </div>
 
+      {/* Styles */}
       <style>
         {`
-          @keyframes border-sparkle {
-            0% {
-              background: rgba(0, 255, 255, 0.6); /* Soft cyan */
-              box-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
-            }
-            25% {
-              background: rgba(255, 255, 255, 0.8); /* Bright white */
-              box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            }
-            50% {
-              background: rgba(0, 255, 255, 1); /* Neon cyan */
-              box-shadow: 0 0 15px rgba(0, 255, 255, 1);
-            }
-            75% {
-              background: rgba(255, 255, 255, 0.8); /* Bright white */
-              box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-            }
-            100% {
-              background: rgba(0, 255, 255, 0.6); /* Soft cyan */
-              box-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
-            }
-          }
-
-          .animate-border-sparkle {
-            animation: border-sparkle 2.5s infinite alternate;
-          }
-
           .hover-effect {
             position: relative;
-            padding: 8px; /* Reduced padding */
+            padding: 8px;
             border-radius: 5px;
             transition: all 0.3s ease-in-out;
           }
